@@ -25,6 +25,7 @@
 ### AI & Machine Learning
 - **TensorFlow:** Machine learning library used for building recognition.
 - **OpenCV:** Computer vision library for image processing and recognition.
+- **YOLOv4** Pre-trained model
 
 ### Maps & Navigation
 - **Google Maps API:** Provides location services and route calculation.
