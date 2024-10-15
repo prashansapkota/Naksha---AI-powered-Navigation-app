@@ -32,7 +32,6 @@
 
 
 ## Installation
-
 Follow these steps to set up both the frontend and backend locally:
 
 ### Prerequisites
