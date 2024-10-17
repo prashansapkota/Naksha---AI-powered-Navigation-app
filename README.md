@@ -7,7 +7,6 @@
 - **Real-Time Building Recognition:** Utilizes AI models (TensorFlow, OpenCV) to accurately identify campus buildings.
 - **Route Optimization:** Leverages the Google Maps API to calculate the most efficient paths around the campus.
 - **Points of Interest:** Highlights important locations such as libraries, cafeterias, and administrative offices.
-- **Augmented Reality Integration:** AR overlays provide an immersive navigation experience through supported devices.
 - **Responsive Design:** Optimized for seamless usage across desktop, tablet, and mobile devices.
 
 ## Technology Stack
@@ -16,8 +15,7 @@
 - **React.js:** A JavaScript library for building the user interface.
 - **Next.js:** Framework for server-side rendering and static site generation.
 - **Tailwind CSS:** Utility-first CSS framework for responsive and customizable design.
-- **AR Foundation:** Used for augmented reality (AR) overlays for immersive campus navigation.
-  
+
 ### Backend
 - **Node.js:** Handles server-side logic, API requests, and manages backend services.
 - **Firebase:** Provides a real-time database and cloud functions for storage and authentication.
