@@ -3,17 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function SignupForm() {
+export default function SignupForm({ onSuccess }) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        studentId: ""
+        confirmPassword: ""
     });
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const handleChange = (e) => {
@@ -26,9 +27,11 @@ export default function SignupForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setIsLoading(true);
 
         if (formData.password !== formData.confirmPassword) {
             setError("Passwords do not match");
+            setIsLoading(false);
             return;
         }
 
@@ -42,41 +45,43 @@ export default function SignupForm() {
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     email: formData.email,
-                    password: formData.password,
-                    studentId: formData.studentId
+                    password: formData.password
                 }),
             });
 
             if (res.ok) {
+                if (onSuccess) onSuccess();
                 router.push("/login");
             } else {
                 const data = await res.json();
                 setError(data.message);
             }
         } catch (error) {
-            setError("Something went wrong");
+            setError("Something went wrong. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <div className="relative z-10 w-full max-w-md p-8">
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8">
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-8">
                 <div className="text-center mb-8">
                     <Image
-                        src="/fisk-logo.png"
+                        src="/images/naksha-logo.png"
                         alt="Fisk University Logo"
                         width={100}
                         height={100}
                         className="mx-auto mb-4"
                     />
-                    <h2 className="text-3xl font-bold text-blue-900">Join Naksha</h2>
-                    <p className="text-gray-600 mt-2">Navigate Fisk University with ease</p>
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Create Account</h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-2">Join Naksha today</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 First Name
                             </label>
                             <input
@@ -85,11 +90,12 @@ export default function SignupForm() {
                                 value={formData.firstName}
                                 onChange={handleChange}
                                 required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Last Name
                             </label>
                             <input
@@ -98,27 +104,14 @@ export default function SignupForm() {
                                 value={formData.lastName}
                                 onChange={handleChange}
                                 required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Student ID
-                        </label>
-                        <input
-                            type="text"
-                            name="studentId"
-                            value={formData.studentId}
-                            onChange={handleChange}
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Email Address
                         </label>
                         <input
@@ -127,12 +120,13 @@ export default function SignupForm() {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                                focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Password
                         </label>
                         <input
@@ -141,12 +135,13 @@ export default function SignupForm() {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                                focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Confirm Password
                         </label>
                         <input
@@ -155,26 +150,31 @@ export default function SignupForm() {
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                                focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                         />
                     </div>
 
                     {error && (
-                        <div className="text-red-500 text-sm text-center">{error}</div>
+                        <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm text-center">
+                            {error}
+                        </div>
                     )}
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-900 text-white rounded-md py-2 hover:bg-blue-800 transition-colors duration-200"
+                        disabled={isLoading}
+                        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
+                            transition-colors duration-200 font-medium disabled:bg-blue-400 disabled:cursor-not-allowed"
                     >
-                        Sign Up
+                        {isLoading ? 'Creating Account...' : 'Sign Up'}
                     </button>
 
-                    <p className="text-center text-sm text-gray-600">
-                        Already have an account?{" "}
-                        <a href="/login" className="text-blue-900 hover:underline">
-                            Login here
-                        </a>
+                    <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+                        Already have an account?{' '}
+                        <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                            Sign in
+                        </Link>
                     </p>
                 </form>
             </div>
