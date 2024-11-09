@@ -69,7 +69,7 @@ export default function GuestDashboard() {
           {/* Building Recognition */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <div className="flex items-center mb-4">
-              <CameraIcon className="h-8 w-8 text-green-500" />
+              <CameraIcon className="h-8 w-8 text-blue-500" />
               <h2 className="ml-3 text-xl font-medium">Building Recognition</h2>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
@@ -77,7 +77,7 @@ export default function GuestDashboard() {
             </p>
             <button
               onClick={() => router.push('/building-recognition')}
-              className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Start Scanning
             </button>
