@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Camera overlay styles */
 .camera-overlay {
   @apply fixed inset-0 pointer-events-none;
   background: linear-gradient(
@@ -116,4 +115,24 @@ input{
 
 .current-location-marker {
   @apply bg-blue-500 text-white px-2 py-1 rounded-full shadow-lg;
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #ffffff;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  @apply w-full px-4 py-2.5 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors rounded-lg;
+}
+
+input[type="checkbox"] {
+  @apply rounded border-gray-300 text-blue-600 focus:ring-blue-500;
+
 }
