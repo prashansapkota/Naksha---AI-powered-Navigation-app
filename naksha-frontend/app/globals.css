@@ -4,13 +4,11 @@
 
 .camera-overlay {
   @apply fixed inset-0 pointer-events-none;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.5) 0%,
-    transparent 25%,
-    transparent 75%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.5) 0%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0, 0, 0, 0.5) 100%);
 }
 
 /* Capture button animation */
@@ -34,13 +32,12 @@
 
 .nav-icon-active::after {
   content: '';
-  @apply absolute -bottom-1 left-1/2 transform -translate-x-1/2
-         w-1 h-1 bg-blue-500 rounded-full;
+  @apply absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full;
 }
 
-input{
+input {
   @apply w-[400px] border border-gray-200 py-2 px-6 bg-zinc-100/40;
-  
+
 }
 
 .image-upload-container {
@@ -116,14 +113,15 @@ input{
 .current-location-marker {
   @apply bg-blue-500 text-white px-2 py-1 rounded-full shadow-lg;
 
-:root {
-  --background: #ffffff;
-  --foreground: #000000;
-}
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
 
-.dark {
-  --background: #0f172a;
-  --foreground: #ffffff;
+  .dark {
+    --background: #0f172a;
+    --foreground: #ffffff;
+  }
 }
 
 input[type="text"],
@@ -133,6 +131,5 @@ input[type="password"] {
 }
 
 input[type="checkbox"] {
-  @apply rounded border-gray-300 text-blue-600 focus:ring-blue-500;
-
+  @apply rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600;
 }
