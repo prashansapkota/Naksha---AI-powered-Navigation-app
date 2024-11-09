@@ -53,13 +53,7 @@ export default function LoginForm({ onSuccess }) {
         <div className="relative z-10 w-full max-w-md p-8">
             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-8">
                 <div className="text-center mb-8">
-                    <Image
-                        src="/images/naksha-logo.png"
-                        alt="Fisk University Logo"
-                        width={100}
-                        height={100}
-                        className="mx-auto mb-4"
-                    />
+                    
                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back!</h2>
                     <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to continue</p>
                 </div>

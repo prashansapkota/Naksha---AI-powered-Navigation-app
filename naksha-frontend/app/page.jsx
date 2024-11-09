@@ -20,13 +20,7 @@ export default function LandingPage() {
       <div className="container mx-auto px-4 py-16">
         {/* Logo and Title */}
         <div className="text-center mb-12">
-          <Image
-            src="/images/naksha-logo.png"
-            alt="Naksha Logo"
-            width={120}
-            height={120}
-            className="mx-auto mb-6"
-          />
+          
           <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
             Welcome to Naksha
           </h1>
