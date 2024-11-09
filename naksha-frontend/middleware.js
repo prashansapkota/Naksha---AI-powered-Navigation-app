@@ -8,22 +8,18 @@ export function middleware(request) {
     const publicPaths = ['/', '/login', '/signup', '/privacy', '/terms', '/contact'];
     const isPublicPath = publicPaths.includes(path);
 
-    // Protected dashboard paths
-    const isDashboardPath = path.startsWith('/dashboard');
+    // Protected paths
+    const protectedPaths = ['/welcome', '/dashboard', '/map', '/camera'];
+    const isProtectedPath = protectedPaths.some(p => path.startsWith(p));
 
-    // Allow access to welcome page (root path '/') without redirection
-    if (path === '/' && !token) {
-        return NextResponse.next();
-    }
-
-    // Redirect authenticated users to dashboard if they try to access login/signup
-    if (isPublicPath && token && path !== '/') {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
-
-    // Redirect unauthenticated users to login if they try to access protected routes
-    if (isDashboardPath && !token) {
+    // If trying to access protected routes without token, redirect to login
+    if (isProtectedPath && !token) {
         return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    // If trying to access login/signup with token, redirect to welcome page
+    if (isPublicPath && token && path !== '/') {
+        return NextResponse.redirect(new URL('/welcome', request.url));
     }
 
     return NextResponse.next();
@@ -34,9 +30,10 @@ export const config = {
         '/',
         '/login',
         '/signup',
+        '/welcome',
         '/dashboard/:path*',
-        '/privacy',
-        '/terms',
-        '/contact'
+        '/map/:path*',
+        '/camera/:path*',
+        '/api/user/:path*'
     ]
 }; 
