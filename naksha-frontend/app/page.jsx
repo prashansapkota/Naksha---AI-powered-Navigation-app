@@ -2,135 +2,139 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import LoginForm from '@/components/LoginForm';
 import SignupForm from '@/components/SignupForm';
-import Image from 'next/image';
 
-export default function LandingPage() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+const FISK_CENTER = {
+  lat: 36.1676,
+  lng: -86.8083
+};
+
+export default function Home() {
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showSignupForm, setShowSignupForm] = useState(false);
   const router = useRouter();
 
-  const handleGuestAccess = () => {
-    router.push('/guest-dashboard');
+  const handleLoginSuccess = () => {
+    setShowLoginForm(false);
+    router.push('/welcome');
+  };
+
+  const handleSignupSuccess = () => {
+    setShowSignupForm(false);
+    router.push('/welcome');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950">
-      <div className="container mx-auto px-4 py-16">
-        {/* Logo and Title */}
-        <div className="text-center mb-12">
-          
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+    <div className="min-h-screen relative">
+      {/* Background Map */}
+      <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
+        <GoogleMap
+          mapContainerStyle={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0
+          }}
+          center={FISK_CENTER}
+          zoom={17}
+          options={{
+            disableDefaultUI: true,
+            mapTypeId: 'satellite',
+            tilt: 45,
+            heading: 45,
+            gestureHandling: 'none'
+          }}
+        />
+      </LoadScript>
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 z-10" />
+
+      {/* Main Content */}
+      <div className="relative z-20 min-h-screen flex flex-col items-center justify-center px-4">
+        {/* Hero Section */}
+        <div className="text-center mb-12 space-y-6 max-w-3xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-bold text-white animate-fade-in">
             Welcome to Naksha
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Your AI-powered campus navigation assistant for Fisk University
+          <p className="text-xl md:text-2xl text-gray-200 animate-fade-in-delay">
+            Your AI-powered campus navigation assistant
           </p>
         </div>
 
-        {/* Access Options */}
-        <div className="max-w-md mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl p-8">
-          <div className="space-y-4">
-            <button
-              onClick={() => setShowLogin(true)}
-              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 
-                transition-all duration-300 transform hover:scale-[1.02] font-medium"
-            >
-              Login
-            </button>
-            
-            <button
-              onClick={() => setShowSignup(true)}
-              className="w-full py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-50 
-                transition-all duration-300 transform hover:scale-[1.02] font-medium
-                border-2 border-blue-600 dark:bg-gray-800 dark:text-blue-400"
-            >
-              Sign Up
-            </button>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">or</span>
-              </div>
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl hover:bg-white/20 transition-all duration-300 cursor-pointer">
+            <div className="text-blue-400 mb-4">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
             </div>
+            <h3 className="text-xl font-semibold text-white mb-2">Interactive Maps</h3>
+            <p className="text-gray-300">Navigate campus with real-time directions and building information</p>
+          </div>
 
-            <button
-              onClick={handleGuestAccess}
-              className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 
-                transition-all duration-300 transform hover:scale-[1.02] font-medium
-                dark:bg-gray-700 dark:text-gray-300"
-            >
-              Continue as Guest
-            </button>
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl hover:bg-white/20 transition-all duration-300 cursor-pointer">
+            <div className="text-green-400 mb-4">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">Building Recognition</h3>
+            <p className="text-gray-300">Instantly identify buildings using AI-powered image recognition</p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl hover:bg-white/20 transition-all duration-300 cursor-pointer">
+            <div className="text-purple-400 mb-4">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">Smart Navigation</h3>
+            <p className="text-gray-300">Get personalized directions and campus information</p>
           </div>
         </div>
 
-        {/* Features Preview */}
-        <div className="mt-16 grid md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Building Recognition",
-              description: "Instantly identify campus buildings using AI",
-              icon: "🏛️"
-            },
-            {
-              title: "Smart Navigation",
-              description: "Get optimized routes across campus",
-              icon: "🗺️"
-            },
-            {
-              title: "Campus Information",
-              description: "Access detailed facility information",
-              icon: "ℹ️"
-            }
-          ].map((feature, index) => (
-            <div 
-              key={index}
-              className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-6 rounded-xl 
-                shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+        {/* Call to Action Buttons */}
+        <div className="space-x-4">
+          <button
+            onClick={() => setShowLoginForm(true)}
+            className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
+            Login
+          </button>
+          <button
+            onClick={() => setShowSignupForm(true)}
+            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+          >
+            Sign Up
+          </button>
+          <button
+            onClick={() => router.push('/guest-dashboard')}
+            className="px-8 py-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors backdrop-blur-sm font-medium"
+          >
+            Continue as Guest
+          </button>
         </div>
       </div>
 
-      {/* Login Modal */}
-      {showLogin && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="relative w-full max-w-md">
-            <button 
-              onClick={() => setShowLogin(false)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300"
-            >
-              Close ✕
-            </button>
-            <LoginForm onSuccess={() => setShowLogin(false)} />
+      {/* Modal Forms */}
+      {showLoginForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <LoginForm onSuccess={handleLoginSuccess} onClose={() => setShowLoginForm(false)} />
           </div>
         </div>
       )}
 
-      {/* Signup Modal */}
-      {showSignup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="relative w-full max-w-md">
-            <button 
-              onClick={() => setShowSignup(false)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300"
-            >
-              Close ✕
-            </button>
-            <SignupForm onSuccess={() => setShowSignup(false)} />
+      {showSignupForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <SignupForm onSuccess={handleSignupSuccess} onClose={() => setShowSignupForm(false)} />
           </div>
         </div>
       )}

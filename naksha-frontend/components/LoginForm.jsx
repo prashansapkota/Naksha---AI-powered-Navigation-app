@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function LoginForm({ onSuccess }) {
+export default function LoginForm({ onSuccess, onClose, onSwitchToSignup }) {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -50,10 +50,31 @@ export default function LoginForm({ onSuccess }) {
     };
 
     return (
-        <div className="relative z-10 w-full max-w-md p-8">
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-8">
+        <div className="relative z-10 w-full max-w-md">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                <button
+                    onClick={onClose}
+                    className="absolute -top-4 -right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-lg 
+                        hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors z-50"
+                >
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-6 w-6 text-gray-600 dark:text-gray-300" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                    >
+                        <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M6 18L18 6M6 6l12 12" 
+                        />
+                    </svg>
+                </button>
+
                 <div className="text-center mb-8">
-                    
+                   
                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back!</h2>
                     <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to continue</p>
                 </div>
@@ -124,9 +145,16 @@ export default function LoginForm({ onSuccess }) {
 
                     <p className="text-center text-sm text-gray-600 dark:text-gray-400">
                         Don't have an account?{' '}
-                        <Link href="/signup" className="text-blue-600 hover:text-blue-500 font-medium">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (onClose) onClose();
+                                if (onSwitchToSignup) onSwitchToSignup();
+                            }}
+                            className="text-blue-600 hover:text-blue-500 font-medium inline-block"
+                        >
                             Sign up
-                        </Link>
+                        </button>
                     </p>
                 </form>
             </div>

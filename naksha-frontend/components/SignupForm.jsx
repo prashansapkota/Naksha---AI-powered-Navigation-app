@@ -3,9 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 
-export default function SignupForm({ onSuccess }) {
+export default function SignupForm({ onSuccess, onClose, onSwitchToLogin }) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -27,13 +26,13 @@ export default function SignupForm({ onSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        setIsLoading(true);
-
+        
         if (formData.password !== formData.confirmPassword) {
             setError("Passwords do not match");
-            setIsLoading(false);
             return;
         }
+
+        setIsLoading(true);
 
         try {
             const res = await fetch("/api/auth/signup", {
@@ -41,20 +40,15 @@ export default function SignupForm({ onSuccess }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    email: formData.email,
-                    password: formData.password
-                }),
+                body: JSON.stringify(formData),
             });
 
             if (res.ok) {
                 if (onSuccess) onSuccess();
-                router.push("/login");
+                router.push('/dashboard');
             } else {
                 const data = await res.json();
-                setError(data.message);
+                setError(data.message || 'Registration failed');
             }
         } catch (error) {
             setError("Something went wrong. Please try again.");
@@ -64,15 +58,36 @@ export default function SignupForm({ onSuccess }) {
     };
 
     return (
-        <div className="relative z-10 w-full max-w-md p-8">
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-8">
+        <div className="relative z-10 w-full max-w-md">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                <button
+                    onClick={onClose}
+                    className="absolute -top-4 -right-4 bg-white dark:bg-gray-700 rounded-full p-2 shadow-lg 
+                        hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors z-50"
+                >
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-6 w-6 text-gray-600 dark:text-gray-300" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                    >
+                        <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M6 18L18 6M6 6l12 12" 
+                        />
+                    </svg>
+                </button>
+
                 <div className="text-center mb-8">
                     
                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Create Account</h2>
                     <p className="text-gray-600 dark:text-gray-400 mt-2">Join Naksha today</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -86,6 +101,7 @@ export default function SignupForm({ onSuccess }) {
                                 required
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                                     focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                placeholder="John"
                             />
                         </div>
                         <div>
@@ -100,6 +116,7 @@ export default function SignupForm({ onSuccess }) {
                                 required
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                                     focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                placeholder="Doe"
                             />
                         </div>
                     </div>
@@ -116,6 +133,7 @@ export default function SignupForm({ onSuccess }) {
                             required
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                                 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="you@example.com"
                         />
                     </div>
 
@@ -131,6 +149,7 @@ export default function SignupForm({ onSuccess }) {
                             required
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                                 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="••••••••"
                         />
                     </div>
 
@@ -146,6 +165,7 @@ export default function SignupForm({ onSuccess }) {
                             required
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                                 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="••••••••"
                         />
                     </div>
 
@@ -161,14 +181,21 @@ export default function SignupForm({ onSuccess }) {
                         className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
                             transition-colors duration-200 font-medium disabled:bg-blue-400 disabled:cursor-not-allowed"
                     >
-                        {isLoading ? 'Creating Account...' : 'Sign Up'}
+                        {isLoading ? 'Creating Account...' : 'Create Account'}
                     </button>
 
                     <p className="text-center text-sm text-gray-600 dark:text-gray-400">
                         Already have an account?{' '}
-                        <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (onClose) onClose();
+                                if (onSwitchToLogin) onSwitchToLogin();
+                            }}
+                            className="text-blue-600 hover:text-blue-500 font-medium inline-block"
+                        >
                             Sign in
-                        </Link>
+                        </button>
                     </p>
                 </form>
             </div>
