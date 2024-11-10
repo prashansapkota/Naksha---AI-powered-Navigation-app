@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectMongoDB } from "@/lib/mongodb";
-import Analysis from "@/models/analysis"; // We'll create this model
+import Analysis from "@/models/analysis";
 
 export async function POST(req) {
   try {
@@ -44,13 +44,16 @@ export async function POST(req) {
 
     // Store analysis in MongoDB
     await connectMongoDB();
-    await Analysis.create({
+    const analysis = await Analysis.create({
       userId: req.user?.id, // If you have user authentication
       result: mockResult,
       timestamp: new Date()
     });
 
-    return NextResponse.json(mockResult);
+    return NextResponse.json({
+      ...mockResult,
+      resultId: analysis._id
+    });
   } catch (error) {
     console.error("Building analysis error:", error);
     return NextResponse.json(
