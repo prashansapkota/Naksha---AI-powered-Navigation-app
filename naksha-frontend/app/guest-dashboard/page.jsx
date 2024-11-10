@@ -1,143 +1,196 @@
 "use client";
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapIcon, CameraIcon, UserIcon, BellIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { 
+  MapIcon, 
+  CameraIcon,
+  UserCircleIcon,
+  ArrowRightIcon,
+  SunIcon,
+  MoonIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/outline';
 
 export default function GuestDashboard() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const router = useRouter();
 
-  const handleLoginPrompt = () => {
-    router.push('/?login=true');
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1 },
+    hover: { 
+      scale: 1.02,
+      transition: { duration: 0.2 }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Guest Banner */}
-      <div className="bg-blue-600 text-white py-2 px-4 text-center">
-        <p className="text-sm">
-          You're browsing as a guest. 
-          <button 
-            onClick={handleLoginPrompt}
-            className="underline ml-2 hover:text-blue-200"
-          >
-            Create an account to save your preferences
-          </button>
-        </p>
-      </div>
-
-      {/* Navigation */}
-      <nav className="bg-white dark:bg-gray-800 shadow">
+    <div className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900`}>
+      {/* Sticky Navigation */}
+      <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">Naksha</h1>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Naksha
+              </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button onClick={handleLoginPrompt} className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600">
-                <BellIcon className="h-6 w-6 mr-2" />
-                <span className="text-sm">Enable Notifications</span>
+              <button 
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? 
+                  <SunIcon className="h-6 w-6 text-gray-400" /> : 
+                  <MoonIcon className="h-6 w-6 text-gray-600" />
+                }
               </button>
               <div className="flex items-center">
-                <UserIcon className="h-6 w-6 text-gray-400" />
-                <span className="ml-2 text-gray-600">Guest User</span>
+                <UserCircleIcon className="h-8 w-8 text-gray-400" />
+                <span className="ml-2 text-gray-600 dark:text-gray-300">Guest User</span>
               </div>
+              <button
+                onClick={() => router.push('/')}
+                className="flex items-center text-gray-600 hover:text-blue-600 transition-colors"
+              >
+                Sign In
+              </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      {/* Main Content */}
+      <motion.div 
+        className="max-w-7xl mx-auto px-4 py-8"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        {/* Welcome Message */}
+        <div className="text-center mb-12">
+          <motion.h1 
+            className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-blue-900 dark:from-white dark:to-blue-400 bg-clip-text text-transparent mb-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            Welcome, Guest!
+          </motion.h1>
+          <motion.p 
+            className="text-xl text-gray-600 dark:text-gray-400"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            What would you like to explore today?
+          </motion.p>
+        </div>
+
         {/* Feature Cards */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Map Feature */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div className="flex items-center mb-4">
-              <MapIcon className="h-8 w-8 text-blue-500" />
-              <h2 className="ml-3 text-xl font-medium">Campus Map</h2>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              View an interactive map of the campus and explore key locations
-            </p>
-            <button
-              onClick={() => router.push('/map')}
-              className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Open Map
-            </button>
-          </div>
-
-          {/* Building Recognition */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div className="flex items-center mb-4">
-              <CameraIcon className="h-8 w-8 text-blue-500" />
-              <h2 className="ml-3 text-xl font-medium">Building Recognition</h2>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Use AI to identify buildings and get instant information
-            </p>
-            <button
-              onClick={() => router.push('/building-recognition')}
-              className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Start Scanning
-            </button>
-          </div>
-        </div>
-
-        {/* Recent Activity Preview */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-            Popular Destinations
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              { name: "Jubilee Hall", type: "Historic Building", distance: "2 min walk" },
-              { name: "Library", type: "Academic Building", distance: "5 min walk" },
-              { name: "Student Center", type: "Services", distance: "3 min walk" },
-              { name: "Cravath Hall", type: "Administrative", distance: "4 min walk" }
-            ].map((place, index) => (
-              <div 
-                key={index}
-                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-              >
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">{place.name}</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{place.type}</p>
-                </div>
-                <span className="text-sm text-blue-600 dark:text-blue-400">{place.distance}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Campus Map Card */}
+          <motion.div
+            variants={cardVariants}
+            whileHover="hover"
+            className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden h-80"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Link href="/map" className="block p-8 h-full">
+              <div className="flex items-center justify-between mb-6">
+                <MapIcon className="h-12 w-12 text-blue-500" />
+                <ArrowRightIcon className="h-6 w-6 text-gray-400 transform group-hover:translate-x-1 transition-transform" />
               </div>
-            ))}
-          </div>
-        </div>
+              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                Campus Map
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                Interactive map of Fisk University campus with real-time navigation
+              </p>
+            </Link>
+          </motion.div>
 
-        {/* Create Account Benefits */}
-        <div className="mt-8 bg-blue-50 dark:bg-blue-900/30 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-blue-900 dark:text-blue-300 mb-4">
-            Why Create an Account?
-          </h3>
-          <ul className="space-y-2 text-blue-800 dark:text-blue-400">
-            <li>• Save your favorite locations and routes</li>
-            <li>• Get personalized navigation recommendations</li>
-            <li>• Receive updates about campus events and changes</li>
-            <li>• Contribute to improving campus navigation data</li>
-          </ul>
-          <div className="mt-6 flex gap-4">
-            <button
-              onClick={() => router.push('/?signup=true')}
-              className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Create Account
-            </button>
-            <button
-              onClick={() => router.push('/?login=true')}
-              className="flex-1 py-2 bg-white text-blue-600 border-2 border-blue-600 
-                rounded-lg hover:bg-blue-50 dark:bg-gray-800 dark:border-blue-500 dark:text-blue-500"
-            >
-              Sign In
-            </button>
-          </div>
+          {/* Building Recognition Card */}
+          <motion.div
+            variants={cardVariants}
+            whileHover="hover"
+            className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden h-80"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Link href="/building-recognition" className="block p-8 h-full">
+              <div className="flex items-center justify-between mb-6">
+                <CameraIcon className="h-12 w-12 text-green-500" />
+                <ArrowRightIcon className="h-6 w-6 text-gray-400 transform group-hover:translate-x-1 transition-transform" />
+              </div>
+              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                Building Recognition
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                Identify campus buildings using AI-powered image recognition
+              </p>
+            </Link>
+          </motion.div>
+
+          {/* About Fisk Card */}
+          <motion.div
+            variants={cardVariants}
+            whileHover="hover"
+            className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden h-80"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Link href="/about-fisk" className="block p-8 h-full">
+              <div className="flex items-center justify-between mb-6">
+                <svg 
+                  className="h-12 w-12 text-amber-600" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={1.5} 
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                <ArrowRightIcon className="h-6 w-6 text-gray-400 transform group-hover:translate-x-1 transition-transform" />
+              </div>
+              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                About Fisk
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                Explore Fisk University's rich history, historic buildings, and cultural heritage
+              </p>
+            </Link>
+          </motion.div>
         </div>
-      </main>
+      </motion.div>
+
+      {/* Help Button */}
+      <button 
+        className="fixed bottom-6 right-6 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
+        aria-label="Get help"
+      >
+        <QuestionMarkCircleIcon className="h-6 w-6" />
+      </button>
     </div>
   );
 } 

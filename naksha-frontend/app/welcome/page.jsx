@@ -193,23 +193,35 @@ export default function WelcomePage() {
             </Link>
           </motion.div>
 
-          {/* Academic Info Card */}
+          {/* Replace Academic Info Card with About Fisk Card */}
           <motion.div
             variants={cardVariants}
             whileHover="hover"
             className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden h-80"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Link href="/academic" className="block p-8 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Link href="/about-fisk" className="block p-8 h-full">
               <div className="flex items-center justify-between mb-6">
-                <AcademicCapIcon className="h-12 w-12 text-purple-500" />
+                <svg 
+                  className="h-12 w-12 text-amber-600" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={1.5} 
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
                 <ArrowRightIcon className="h-6 w-6 text-gray-400 transform group-hover:translate-x-1 transition-transform" />
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-                Academic Info
+                About Fisk
               </h3>
               <p className="text-gray-600 dark:text-gray-400 text-lg">
-                Access class schedules and academic resources
+                Explore Fisk University's rich history, historic buildings, and cultural heritage
               </p>
             </Link>
           </motion.div>
