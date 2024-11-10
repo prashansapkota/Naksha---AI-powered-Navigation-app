@@ -32,6 +32,11 @@ export default function SignupForm({ onSuccess, onClose, onSwitchToLogin }) {
             return;
         }
 
+        if (formData.password.length < 6) {
+            setError("Password must be at least 6 characters long");
+            return;
+        }
+
         setIsLoading(true);
 
         try {
@@ -40,14 +45,19 @@ export default function SignupForm({ onSuccess, onClose, onSwitchToLogin }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                    name: `${formData.firstName} ${formData.lastName}`.trim()
+                }),
             });
+
+            const data = await res.json();
 
             if (res.ok) {
                 if (onSuccess) onSuccess();
-                router.push('/dashboard');
+                router.push('/welcome');
             } else {
-                const data = await res.json();
                 setError(data.message || 'Registration failed');
             }
         } catch (error) {

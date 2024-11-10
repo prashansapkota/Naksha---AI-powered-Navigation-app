@@ -1,20 +1,20 @@
 import mongoose from 'mongoose';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your MONGODB_URI to .env.local');
+const MONGODB_URI = "mongodb+srv://prashan:123@cluster0.zx6wy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+if (!mongoose.connections[0].readyState) {
+  mongoose.connect(MONGODB_URI);
 }
 
 export const connectMongoDB = async () => {
   try {
-    if (mongoose.connection.readyState === 1) {
-      return mongoose.connection.asPromise();
+    if (mongoose.connections[0].readyState) {
+      return;
     }
-
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB connected successfully');
-    return mongoose.connection.asPromise();
+    await mongoose.connect(MONGODB_URI);
+    console.log("Connected to MongoDB");
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    console.error("MongoDB connection error:", error);
     throw error;
   }
 }; 

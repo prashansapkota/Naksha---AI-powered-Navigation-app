@@ -35,11 +35,12 @@ export default function LoginForm({ onSuccess, onClose, onSwitchToSignup }) {
                 body: JSON.stringify(formData),
             });
 
+            const data = await res.json();
+
             if (res.ok) {
                 if (onSuccess) onSuccess();
                 router.push('/welcome');
             } else {
-                const data = await res.json();
                 setError(data.message || 'Invalid credentials');
             }
         } catch (error) {

@@ -1,22 +1,16 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
   try {
     const { email, password } = await req.json();
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { message: "All fields are required" },
-        { status: 400 }
-      );
-    }
-
     await connectMongoDB();
 
+    // Find user
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json(
@@ -25,6 +19,7 @@ export async function POST(req) {
       );
     }
 
+    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -40,6 +35,7 @@ export async function POST(req) {
       { expiresIn: '24h' }
     );
 
+    // Create response
     const response = NextResponse.json({
       message: "Login successful",
       user: {
@@ -50,11 +46,13 @@ export async function POST(req) {
     });
 
     // Set HTTP-only cookie
-    response.cookies.set('token', token, {
+    response.cookies.set({
+      name: 'token',
+      value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 86400 // 24 hours
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 // 24 hours
     });
 
     return response;
@@ -62,7 +60,7 @@ export async function POST(req) {
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message: "An error occurred during login" },
       { status: 500 }
     );
   }
